@@ -4,8 +4,19 @@
 */
 
 #include "PCHFile.h" //precompiled Headers
+#include "PluginImpl.h"
 #include "PluginLibrary.h"
 #include "IPlugin.h"
+
+
+// Init & Finish Functions
+// in linux system PluginLibConstruct will be called at Library load 
+// and PluginLibDestroy will be called at Library unload ( finish )
+extern "C"
+{
+    void __attribute__ ((constructor)) PluginLibConstruct();
+    void __attribute__ ((destructor)) PluginLibDestroy();
+}
 
 extern "C"{
     #include <dlfcn.h>
@@ -17,6 +28,8 @@ using namespace XTOOL;
 //const definition
 const char* cGetLibraryInfoName = "GetLibraryInfo"; //TODO: search if we need name mangling
 
+//LibraryInfo function's implementation
+
 //errors 
 enum PlgLibErr
 {
@@ -24,7 +37,8 @@ enum PlgLibErr
     PlgLibErr_LoadErr ,
     PlgLibErr_GetLibInfo_unexisting,
     PlgLibErr_NULL_LibInfos,
-    PlgLibErr_LibNot_Loaded
+    PlgLibErr_LibNot_Loaded,
+    
 };
 
 PluginLibrary::PluginLibrary()
@@ -78,9 +92,14 @@ TError PluginLibrary::LoadFromFile()
                 fLibLoaded = true;
                 fPluginTypes = fLibInfos->pluginsType;
             }
+            else
+            {
+                error = PlgLibErr_NULL_LibInfos;
+            }
             /*
                 TODO: store plugin types
             */
+            
         }
     }
     
@@ -149,4 +168,15 @@ TError  PluginLibrary::GetPluginsTypes(std::vector<TPluginType> outTypes)
         error = PlgLibErr_LibNot_Loaded;
     }
     return error;
+}
+
+
+void PluginLibConstruct()
+{
+    XTOOL::PluginMain();
+}
+
+void PluginLibDestroy()
+{
+    //perhaps we need it for force unregistring
 }

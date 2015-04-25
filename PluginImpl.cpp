@@ -4,7 +4,9 @@
 */
 
 #include "PCHFile.h"
+#include "PluginImpl.h"
 #include "IPlugin.h"
+
 
 using namespace XTOOL;
 

@@ -17,8 +17,6 @@ namespace XTOOL
         every new plugin must inheritent/implement this interface
     */
     
-    //PluginLibrary foreword declaration
-    class PluginLibrary;
     
     class IPlugin 
     {
@@ -36,42 +34,7 @@ namespace XTOOL
             
 
     };
-    
-    template<class Type>  
-    class PUBLIC_API PluginImpl  : public Type //public TPluginType
-    {
-    public:
-        
-        
-        PluginImpl();
-        virtual ~PluginImpl();
-        
-        
-        virtual TPluginType GetPluginType();
-        
-        virtual TFilePath GetPluginLibraryPath();
-        
-        virtual Type* Retain();
-        
-        virtual void     Release();
-        
-        virtual uLONG    GetRefCount() const;
-        /*
-        //this class should not load any PluginLibrary, because it's the Plugin Implementation
-        //and it's implemented into a sharedLibrary which is handled via PluginLibrary class 
-        virtual PluginLibrary* Load (const TPluginPath& inPluginPath);
-    
-        virtual TError         unLoad ();
-        */
-    private:
 
-        TPluginType          fType;
-        TFilePath            fPath;
-        uLONG                fRefCount;
-        
-        
-    };
-    
     
 }//namespace XTOOL
 

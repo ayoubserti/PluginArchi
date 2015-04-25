@@ -9,6 +9,9 @@
 #include "PCHFile.h"
 #include "PluginManager.h"
 #include "PluginLibrary.h"
+
+
+#include <assert.h> 
 //12345
 
 using namespace std;
@@ -17,7 +20,10 @@ namespace XTOOL
     enum PlgMgrErrors
     {
         PlgMgr_OK = ERR_OK,
-        PlgMgr_Plugin_already_found
+        PlgMgr_Plugin_already_found,
+        
+        //keep it in last position
+        PlgMgr_NOT_Implemented
         
         
     };
@@ -79,7 +85,9 @@ namespace XTOOL
     {
         TError error = PlgMgr_OK; //OK
         
+        error = PlgMgr_NOT_Implemented;
         
+        assert(error != PlgMgr_NOT_Implemented);
         
         
         return error;

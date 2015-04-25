@@ -7,23 +7,22 @@
 #define __PLUGIN_LIBRARY_H__
 
 #include "Types.h"
+#include "IPlugin.h"
 
 
 
 namespace XTOOL
 {
-    class IPlugin;
+    
     /*
      PluginLibrary is a Wrap of dlfnct 
      Windows must re-implent this class
     */
-    struct  LibraryInfo
-    {
-        uLONG majorVersion;
-        uLONG minorVersion;
-        std::vector<TPluginType> pluginsType;
-    };
     
+    //Plugin Impl Main Rou
+    void PluginMain();
+    
+    struct LibraryInfo;
     
     class PluginLibrary
     {
@@ -31,32 +30,33 @@ namespace XTOOL
        
         typedef  LibraryInfo* (*GetLibraryInfoFunc)(void);
         
+        
         explicit PluginLibrary(const TFilePath& inLibraryPath);
         
         virtual ~PluginLibrary();
         
-        virtual TError LoadFromFile();
+        virtual TError          LoadFromFile();
         
-        virtual TError UnLoad();
+        virtual TError          UnLoad();
         
-        virtual uLONG  CountPlugins();
+        virtual uLONG           CountPlugins();
         
-        virtual PluginLibrary* Retain();
+        virtual PluginLibrary*  Retain();
         
-        virtual void           Release();
+        virtual void            Release();
         
-        virtual IPlugin*       RetainPluginByType(TPluginType inType);
+        virtual IPlugin*        RetainPluginByType(TPluginType inType);
         
-        virtual TError         GetPluginsTypes(std::vector<TPluginType> outTypes);
+        virtual TError          GetPluginsTypes(std::vector<TPluginType> outTypes);
         
         
     protected:
         
         typedef std::map<TPluginType,IPlugin*> TPluginMap;
         
-        TFilePath    fLibraryPath;
-        uLONG        fPluginCount;
-        TPluginMap   fPluginMap;
+        TFilePath       fLibraryPath;
+        uLONG           fPluginCount;
+        TPluginMap      fPluginMap;
         uLONG           fRefCount;
         
     
