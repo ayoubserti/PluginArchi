@@ -8,13 +8,13 @@
 
 #include "Types.h"
 
-class IPlugin;
-class PluginLibrary;
+
 
 namespace XTOOL 
 {
+    class IPlugin;
+    class PluginLibrary;
     /*
-    
       
       PluginManager allows register, unregister, load, unload and scan plugins in a specific directory
       
@@ -43,7 +43,7 @@ namespace XTOOL
          @return ERR_OK if it's OK else an error code
         */
         
-        static Init(void);
+        TError Init(void);
         /*
             @function RegisterPlugin 
             @abstact  register a plugin by its library path, return Err_OK if OK else an error code 
@@ -52,7 +52,7 @@ namespace XTOOL
             @return error value 
             @TODO: specify error list with its meanings
         */
-        static TError RegisterPlugin (const TFilePath& inPluginPath);
+        TError RegisterPlugin (const TFilePath& inPluginPath);
          
         
         /*
@@ -63,7 +63,7 @@ namespace XTOOL
             @return error value 
             @TODO: specify error list with its meanings
         */
-        static TError UnRegisterPlugin  (const TFilePath& inPluginPath  );
+        TError UnRegisterPlugin  (const TFilePath& inPluginPath  );
         
         /*
             @function UnRegisterPluginByName
@@ -101,9 +101,11 @@ namespace XTOOL
         
         std::map<TPluginType,IPlugin*> sPluginMap;
         std::vector<PluginLibrary*>    sLibraries;
+        //for memory effeciency, we did not Create/Load plugin at init time, we just pick up there types
+        // when user ask for plugin, PMgr load it and mark it as loaded in sCondidatePluginType
+        std::map<TPluginType,bool>     sCondidatePluginType;
         static PluginManager*                 sInstance;
-        
-        static TDirPath                       sPluginsPath;
+        static TDirPath                       sPluginsDir;
         
         //private ctor
         PluginManager();
@@ -116,7 +118,7 @@ namespace XTOOL
         @params inDirPlugins directory from which scan libraries and get 
         @return void
         */
-        static void ScanPlugins (const TDirPath& inDirPlugins );
+        void ScanPlugins (const TDirPath& inDirPlugins );
         
          
         

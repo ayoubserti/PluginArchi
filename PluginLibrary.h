@@ -47,6 +47,8 @@ namespace XTOOL
         
         virtual IPlugin*       RetainPluginByType(TPluginType inType);
         
+        virtual TError         GetPluginsTypes(std::vector<TPluginType> outTypes);
+        
         
     protected:
         
@@ -56,6 +58,7 @@ namespace XTOOL
         uLONG        fPluginCount;
         TPluginMap   fPluginMap;
         uLONG           fRefCount;
+        
     
     private:
          
@@ -64,6 +67,9 @@ namespace XTOOL
         typedef void*   TLibHandle;
         TLibHandle      fLibHandle;
         bool            fLibLoaded;
+        LibraryInfo*    fLibInfos;
+        std::vector<TPluginType>  fPluginTypes;
+        
         
     };
 }

@@ -2,19 +2,28 @@
  Author: Ayoub Serti
  subject: Plugin Architucture example 
 */
+/*
+    this file contains C++11 code
+    please use flags -std=c++11 
+*/
 #include "PCHFile.h"
 #include "PluginManager.h"
+#include "PluginLibrary.h"
 //12345
+
+using namespace std;
 namespace XTOOL
 {
     enum PlgMgrErrors
     {
-        PlgMgr_OK = ERR_OK
+        PlgMgr_OK = ERR_OK,
+        PlgMgr_Plugin_already_found
+        
         
     };
     
     PluginManager* PluginManager::sInstance = NULL;
-    PluginManager::sPluginsDir = "";
+    TDirPath PluginManager::sPluginsDir = "";
     //ctor
     PluginManager::PluginManager()
     {
@@ -29,19 +38,63 @@ namespace XTOOL
         return *sInstance;
     }
     
-    TError PluginManager::RegisterPlugin(const TPluginPath& inPluginPath)
+    TError PluginManager::Init()
     {
-        TError error = PlgMgr_OK; //OK
+        TError error = PlgMgr_OK;
+        ScanPlugins(sPluginsDir);
+        //now, we have created all PluginLibrary objects
+        //iterate over those Lib and search potential IPlugin without register them
+        for (std::vector<PluginLibrary*>::iterator it = sLibraries.begin(), end = sLibraries.end(); (it != end) && (error == ERR_OK); ++it)
+        {
+            error = (*it)->LoadFromFile();
+            if ( error == ERR_OK)
+            {
                 
+                vector<TPluginType> plgTypes;
+                error = (*it)->GetPluginsTypes(plgTypes);
+                if ( error == ERR_OK )
+                {
+                    for (TPluginType& plt : plgTypes)
+                    {
+                        if ( sCondidatePluginType.find(plt) == sCondidatePluginType.end())
+                        {
+                            // plugin type doesn't exist already, so add it and mark it doesn't be retained yet
+                            sCondidatePluginType[plt] = false;
+                        }
+                        else
+                        {
+                            error = PlgMgr_Plugin_already_found;
+                        }
+                    }
+                }
+                
+            }
+            
+        }
         
         return error;
     }
     
+    TError PluginManager::RegisterPlugin(const TPluginPath& inPluginPath)
+    {
+        TError error = PlgMgr_OK; //OK
+        
+        
+        
+        
+        return error;
+    }
+    
+    
+
+    
     //private functions
     void PluginManager::ScanPlugins (const TDirPath& inDirPlugins )
     {
-        if ( !TDirPath.empty())
-        {}
+        if ( !sPluginsDir.empty())
+        {
+            //here create XFolders and iterate over XFiles;
+        }
     }
     
     

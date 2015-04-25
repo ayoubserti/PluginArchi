@@ -22,7 +22,9 @@ enum PlgLibErr
 {
     PlgLibErr_OK = ERR_OK,
     PlgLibErr_LoadErr ,
-    PlgLibErr_GetLibInfo_unexisting
+    PlgLibErr_GetLibInfo_unexisting,
+    PlgLibErr_NULL_LibInfos,
+    PlgLibErr_LibNot_Loaded
 };
 
 PluginLibrary::PluginLibrary()
@@ -32,6 +34,7 @@ PluginLibrary::PluginLibrary()
     fPluginCount =0;
     fLibHandle = NULL;
     fLibLoaded = false;
+    fLibInfos  = NULL;
 }
 
 PluginLibrary::PluginLibrary(const TFilePath& inLibraryPath)
@@ -41,6 +44,7 @@ PluginLibrary::PluginLibrary(const TFilePath& inLibraryPath)
     fPluginCount =0;
     fLibHandle = NULL;
     fLibLoaded = false;
+    fLibInfos = NULL;
 }
 
 TError PluginLibrary::LoadFromFile()
@@ -67,11 +71,12 @@ TError PluginLibrary::LoadFromFile()
         }
         else
         {
-            LibraryInfo* libInfo = xGetInfoFunc();
-            if ( libInfo != NULL )
+            fLibInfos = xGetInfoFunc();
+            if ( fLibInfos != NULL )
             {
-                fPluginCount = libInfo->pluginsType.size();
+                fPluginCount = fLibInfos->pluginsType.size();
                 fLibLoaded = true;
+                fPluginTypes = fLibInfos->pluginsType;
             }
             /*
                 TODO: store plugin types
@@ -123,4 +128,25 @@ IPlugin* PluginLibrary::RetainPluginByType(TPluginType inType)
         return fPluginMap[inType];
     }
     return NULL;
+}
+
+TError  PluginLibrary::GetPluginsTypes(std::vector<TPluginType> outTypes)
+{
+    TError error = ERR_OK;
+    if ( fLibLoaded )
+    {
+        if ( fLibInfos != NULL)
+        {
+            outTypes = fPluginTypes;
+        }
+        else
+        {
+            error = PlgLibErr_NULL_LibInfos;    
+        }
+    }
+    else{
+        
+        error = PlgLibErr_LibNot_Loaded;
+    }
+    return error;
 }
