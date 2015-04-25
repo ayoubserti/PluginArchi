@@ -29,7 +29,7 @@ namespace XTOOL
     };
     
     PluginManager* PluginManager::sInstance = NULL;
-    TDirPath PluginManager::sPluginsDir = "";
+    TDirPath PluginManager::sPluginsDir = "/home/dectroo/PluginArchi/";
     //ctor
     PluginManager::PluginManager()
     {
@@ -101,7 +101,10 @@ namespace XTOOL
     {
         if ( !sPluginsDir.empty())
         {
-            //here create XFolders and iterate over XFiles;
+            //TODO:here create XFolders and iterate over XFiles;
+            PluginLibrary* myPlLib = new PluginLibrary(inDirPlugins+"Plug0.so");
+            sLibraries.push_back(myPlLib->Retain());
+            myPlLib->Release();
         }
     }
     

@@ -30,8 +30,9 @@ namespace XTOOL
        
         typedef  LibraryInfo* (*GetLibraryInfoFunc)(void);
         
-        
         explicit PluginLibrary(const TFilePath& inLibraryPath);
+        
+        PluginLibrary();
         
         virtual ~PluginLibrary();
         
@@ -62,8 +63,6 @@ namespace XTOOL
     
     private:
          
-        PluginLibrary(); //private constructor
-       
         typedef void*   TLibHandle;
         TLibHandle      fLibHandle;
         bool            fLibLoaded;

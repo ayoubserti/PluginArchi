@@ -41,6 +41,7 @@ enum PlgLibErr
     
 };
 
+
 PluginLibrary::PluginLibrary()
 {
     fRefCount =1;
@@ -49,7 +50,7 @@ PluginLibrary::PluginLibrary()
     fLibHandle = NULL;
     fLibLoaded = false;
     fLibInfos  = NULL;
-}
+} 
 
 PluginLibrary::PluginLibrary(const TFilePath& inLibraryPath)
 {
@@ -59,6 +60,16 @@ PluginLibrary::PluginLibrary(const TFilePath& inLibraryPath)
     fLibHandle = NULL;
     fLibLoaded = false;
     fLibInfos = NULL;
+}
+
+PluginLibrary::~PluginLibrary()
+{
+    if (fLibLoaded)
+        if (fLibHandle)
+            dlclose(fLibHandle);
+    if (fLibInfos);
+        //delete fLibInfos; //source de bug
+    
 }
 
 TError PluginLibrary::LoadFromFile()
@@ -173,7 +184,9 @@ TError  PluginLibrary::GetPluginsTypes(std::vector<TPluginType> outTypes)
 
 void PluginLibConstruct()
 {
+#if defined(PLUGIN_PROJECT)
     XTOOL::PluginMain();
+#endif 
 }
 
 void PluginLibDestroy()
