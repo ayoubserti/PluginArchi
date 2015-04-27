@@ -5,49 +5,36 @@
 
 #include "PCHFile.h"
 #include "Types.h"
-#include "IPlugin.h"
-#include "PluginImpl.h"
+#include "Plugin0.h"
 #include "PluginLibrary.h"
 #include <iostream>
 
 
-using namespace XTOOL;
+
 using namespace std;
+
+using namespace XTOOL;
+
+
 
 extern "C"
 {
     LibraryInfo*  GetLibraryInfo();
 }
 
-class CPlugin : public IPlugin
+void CPlugin::showMessage()
 {
-    public:
-    enum {
-        TYPE_PLUGIN = 'PLG0'
-    };
-    
-   /* TPluginType GetPluginType()
-    {
-        return TYPE_PLUGIN;
-    }*/
-    
-    void showMessage()
-    {
-        cout << "Sa marche" << endl;
-    }
-    
-};
+    cout << "Sa marche" << endl;
+}
 
-class CPluginImp : public PluginImpl<CPlugin>
+
+CPluginImp::CPluginImp(const TPluginPath& inPath)
 {
-    public:
-    CPluginImp(const TPluginPath& inPath)
-    {
-        fPath = inPath;
-        fType = CPlugin::TYPE_PLUGIN;
-    }
-};
+    fPath = inPath;
+    fType = CPlugin::TYPE_PLUGIN;
+}
 
+CPluginImp::CPluginImp(){};
 //global objects
 LibraryInfo* gLibInfos;
 CPluginImp* gPluginImp;
@@ -58,9 +45,10 @@ LibraryInfo*  GetLibraryInfo()
     return gLibInfos;
 }
 
-void PluginMain()
-{
-    gPluginImp = new CPluginImp("/home/dectroo/Test");
+void XTOOL::PluginMain()
+{ 
+    cout << " From Plugin0" << endl; 
+    gPluginImp = new CPluginImp();//"/home/dectroo/Test");
     gLibInfos = new LibraryInfo();
     gLibInfos->majorVersion = 0x0;
     gLibInfos->minorVersion = 0x01;

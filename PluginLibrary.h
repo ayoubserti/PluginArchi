@@ -48,7 +48,7 @@ namespace XTOOL
         
         virtual IPlugin*        RetainPluginByType(TPluginType inType);
         
-        virtual TError          GetPluginsTypes(std::vector<TPluginType> outTypes);
+        virtual TError          GetPluginsTypes(std::vector<TPluginType>& outTypes);
         
         
     protected:

@@ -160,7 +160,7 @@ IPlugin* PluginLibrary::RetainPluginByType(TPluginType inType)
     return NULL;
 }
 
-TError  PluginLibrary::GetPluginsTypes(std::vector<TPluginType> outTypes)
+TError  PluginLibrary::GetPluginsTypes(std::vector<TPluginType>& outTypes)
 {
     TError error = ERR_OK;
     if ( fLibLoaded )

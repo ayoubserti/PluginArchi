@@ -21,6 +21,7 @@ namespace XTOOL
     {
         PlgMgr_OK = ERR_OK,
         PlgMgr_Plugin_already_found,
+        PlgMgr_Plugin_Not_found,
         
         //keep it in last position
         PlgMgr_NOT_Implemented
@@ -58,8 +59,10 @@ namespace XTOOL
                 
                 vector<TPluginType> plgTypes;
                 error = (*it)->GetPluginsTypes(plgTypes);
+                
                 if ( error == ERR_OK )
                 {
+                    sLibPlugTypeMap[(*it)->Retain()] = plgTypes; 
                     for (TPluginType& plt : plgTypes)
                     {
                         if ( sCondidatePluginType.find(plt) == sCondidatePluginType.end())
@@ -93,6 +96,13 @@ namespace XTOOL
         return error;
     }
     
+    TError PluginManager::RegisterPlugin (TPluginType inPluginType)
+    {
+        TError error = PlgMgr_OK;
+        
+        
+        return error;
+    }
     
 
     
@@ -108,5 +118,61 @@ namespace XTOOL
         }
     }
     
+    IPlugin*    PluginManager::RetainPluginByType(TPluginType  inPluginType)
+    {
+        
+        IPlugin* result = NULL;
+        
+        if  (sPluginMap.find(inPluginType) != sPluginMap.end())
+        {
+            if ( sPluginMap[inPluginType])
+                return   sPluginMap[inPluginType]->Retain();
+            
+        }
+        else
+        {
+            if ( sCondidatePluginType.find(inPluginType) != sCondidatePluginType.end())
+            {
+                if (!sCondidatePluginType[inPluginType])
+                {
+                    //if plugin was found but it's not loaded from library 
+                    PluginLibrary* plgLib = GetLibraryContainer(inPluginType);
+                    if (plgLib)
+                    {
+                        sPluginMap[inPluginType] = plgLib->RetainPluginByType(inPluginType)->Retain();
+                        sCondidatePluginType[inPluginType] = true;
+                        result =sPluginMap[inPluginType]->Retain();
+                        
+                    }
+                    else 
+                    {
+                        return NULL;
+                    }
+                }
+            }
+            else
+            {
+              //error = PlgMgr_Plugin_Not_found;   
+            }
+        }
+        
+        return result;
+    }
+    
+    PluginLibrary* PluginManager::GetLibraryContainer( TPluginType inPluginType)
+    {
+        PluginLibrary* result = NULL;
+        
+        for (auto& elem : sLibPlugTypeMap)
+        {
+            if (find(elem.second.begin(),elem.second.end() ,inPluginType) != elem.second.end() )
+            {
+                result = elem.first;
+                break;
+            }
+        }
+        
+        return result;
+    }
     
 }

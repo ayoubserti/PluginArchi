@@ -10,8 +10,9 @@
 
 using namespace XTOOL;
 
+
 //ctor
-template<class Type>
+template<typename Type>
 PluginImpl<Type>::PluginImpl()
 {
     

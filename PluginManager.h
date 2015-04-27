@@ -53,6 +53,8 @@ namespace XTOOL
             @TODO: specify error list with its meanings
         */
         TError RegisterPlugin (const TFilePath& inPluginPath);
+        
+        TError RegisterPlugin (TPluginType inPluginType);
          
         
         /*
@@ -74,7 +76,7 @@ namespace XTOOL
             @TODO: specify error list with its meanings
                    may be this function unuseful
         */
-        static TError UnRegisterPluginByName  (const TString& inPluginName    );
+        TError UnRegisterPluginByName  (const TString& inPluginName    );
         
         /*
             @function UnRegisterPluginByType
@@ -84,7 +86,7 @@ namespace XTOOL
             @return error value 
             @TODO: specify error list with its meanings
         */
-        static TError UnRegisterPluginByType  (TPluginType inPluginType);
+        TError UnRegisterPluginByType  (TPluginType inPluginType);
         
         /*
             @function LoadPluginLibrary 
@@ -94,13 +96,24 @@ namespace XTOOL
             @return error value 
         */
         
-        static PluginLibrary* LoadPluginLibrary (const TString& inPluginPath) ;
+        PluginLibrary* LoadPluginLibrary (const TString& inPluginPath) ;
+        
+        /*
+            @function RetainPluginByType
+            @abstact  retain IPlugin* reference
+            @params  inPluginType is the plugin types
+            @return  IPlugin* reference
+        */
+        
+        IPlugin*             RetainPluginByType(TPluginType  inPluginType);
         
         
     private:
         
         std::map<TPluginType,IPlugin*> sPluginMap;
-        std::vector<PluginLibrary*>    sLibraries;
+        std::vector<PluginLibrary*>    sLibraries; //TODO: must be removed. use sLibPlugMap instead
+        std::map<PluginLibrary*,std::vector<TPluginType> > sLibPlugTypeMap;
+       
         //for memory effeciency, we did not Create/Load plugin at init time, we just pick up there types
         // when user ask for plugin, PMgr load it and mark it as loaded in sCondidatePluginType
         std::map<TPluginType,bool>     sCondidatePluginType;
@@ -120,7 +133,13 @@ namespace XTOOL
         */
         void ScanPlugins (const TDirPath& inDirPlugins );
         
-         
+        
+        /*
+        @function GetLibraryContainer
+        @abstract find PluginLibrary of the specified plugintype
+        */
+        
+        PluginLibrary* GetLibraryContainer( TPluginType inPluginType);
         
         
     };
