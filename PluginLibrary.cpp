@@ -102,6 +102,7 @@ TError PluginLibrary::LoadFromFile()
                 fPluginCount = fLibInfos->pluginsType.size();
                 fLibLoaded = true;
                 fPluginTypes = fLibInfos->pluginsType;
+                fPluginMap   = fLibInfos->pluginMap;
             }
             else
             {
@@ -153,7 +154,7 @@ void PluginLibrary::Release()
 IPlugin* PluginLibrary::RetainPluginByType(TPluginType inType)
 {
     
-    if ( !(fPluginMap.find(inType) != fPluginMap.end() ))
+    if ( fPluginMap.find(inType) != fPluginMap.end() )
     {
         return fPluginMap[inType];
     }

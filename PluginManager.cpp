@@ -22,7 +22,7 @@ namespace XTOOL
         PlgMgr_OK = ERR_OK,
         PlgMgr_Plugin_already_found,
         PlgMgr_Plugin_Not_found,
-        
+        PlgMgr_Plugin_Couldnt_load,
         //keep it in last position
         PlgMgr_NOT_Implemented
         
@@ -76,10 +76,15 @@ namespace XTOOL
                         }
                     }
                 }
+                else
+                {
+                    error = PlgMgr_Plugin_Couldnt_load;
+                    std::cout << error << " could not load" << std::endl ;
+                }
                 
             }
             
-        }
+        } 
         
         return error;
     }
@@ -139,9 +144,13 @@ namespace XTOOL
                     PluginLibrary* plgLib = GetLibraryContainer(inPluginType);
                     if (plgLib)
                     {
-                        sPluginMap[inPluginType] = plgLib->RetainPluginByType(inPluginType)->Retain();
-                        sCondidatePluginType[inPluginType] = true;
-                        result =sPluginMap[inPluginType]->Retain();
+                        IPlugin* iPlg = plgLib->RetainPluginByType(inPluginType);
+                        if (iPlg != NULL)
+                        {
+                            sPluginMap[inPluginType] = iPlg->Retain();
+                            sCondidatePluginType[inPluginType] = true;
+                            result =sPluginMap[inPluginType]->Retain();
+                        }
                         
                     }
                     else 

@@ -22,7 +22,7 @@ extern "C"
     LibraryInfo*  GetLibraryInfo();
 }
 
-void CPlugin::showMessage()
+void CPluginImp::showMessage()
 {
     cout << "Sa marche" << endl;
 }
@@ -54,5 +54,6 @@ void XTOOL::PluginMain()
     gLibInfos->minorVersion = 0x01;
     
     gLibInfos->pluginsType.push_back(CPlugin::TYPE_PLUGIN);
-    gLibInfos->plugins.push_back(gPluginImp->Retain());
+    gLibInfos->plugins.push_back(gPluginImp);
+    gLibInfos->pluginMap[CPlugin::TYPE_PLUGIN] = gPluginImp->Retain();
 }

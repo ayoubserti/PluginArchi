@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
 /*
 #include "Types.h"
 #include "PluginManager.h"

@@ -14,8 +14,8 @@ int main()
 {
    // PluginManager::Get().RegisterPlugin("");
     cout << PluginManager::Get().Init() << endl;
-    IPlugin* plg = PluginManager::Get().RetainPluginByType('PLG0');
-    
+    CPlugin* plg = dynamic_cast<CPlugin*>(PluginManager::Get().RetainPluginByType('PLG0'));
+    plg->showMessage();
     printf("%p\n", plg);
     
     

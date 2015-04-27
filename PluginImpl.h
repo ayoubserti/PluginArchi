@@ -21,6 +21,8 @@ namespace XTOOL
         
         std::vector<IPlugin*>    plugins;
         
+        std::map<TPluginType,IPlugin*> pluginMap;
+        
     };
     
     template<class Type>  

@@ -16,7 +16,7 @@ class CPlugin : public XTOOL::IPlugin
     };
     
     
-    void showMessage();
+    virtual void showMessage() =0;
     
 };
 
@@ -26,6 +26,7 @@ class CPluginImp : public PluginImpl<CPlugin>
     public:
     CPluginImp();
     CPluginImp(const TPluginPath& inPath);
+    void showMessage();
 };
 
 }
