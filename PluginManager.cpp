@@ -30,7 +30,7 @@ namespace XTOOL
     };
     
     PluginManager* PluginManager::sInstance = NULL;
-    TDirPath PluginManager::sPluginsDir = "/home/dectroo/PluginArchi/";
+    TDirPath PluginManager::sPluginsDir = "/home/ubuntu/workspace/pluginarchi/";
     //ctor
     PluginManager::PluginManager()
     {
