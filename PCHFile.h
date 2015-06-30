@@ -14,6 +14,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
+#include <mutex>
 /*
 #include "Types.h"
 #include "PluginManager.h"
