@@ -11,6 +11,7 @@
 
 namespace std{
     class thread;
+    class mutex;
 }
 
 namespace XTOOL
@@ -21,6 +22,8 @@ namespace XTOOL
     */
     class IThread;
     
+    class XThreadManager;
+    
     static void* runThread(IThread* inThread);
     
     class IThread
@@ -29,6 +32,8 @@ namespace XTOOL
         
         
         IThread();
+        explicit IThread( XThreadManager* inManager);
+        
         virtual ~IThread();
         TError Start();
         TError Join();
@@ -36,8 +41,13 @@ namespace XTOOL
         
         std::thread* This();
         
+        /*
+          Set a Thread Manager. TODO: think about the safety of this function
+        */
+        TError SetManager (XThreadManager* inManager);
         
-        private:
+        
+        protected:
         
         virtual void* OnRun()    = 0; // make it private
         enum Thread_Stat
@@ -51,8 +61,16 @@ namespace XTOOL
         unsigned long fStat;
         
         friend  void* XTOOL::runThread(IThread* inThread); //C approach. maybe we would use std::function instead 
+        XThreadManager* fManager;
+        
     };
     
+    //ThreadMessage
+    
+    class ThreadMessage
+    {
+        
+    };
     
 }
 

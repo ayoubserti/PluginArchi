@@ -1,13 +1,14 @@
 #include "PCHFile.h"
 
 #include "threading.h"
-
-
+#include "RefManaged.h"
+#include "ThreadManager.h"
 
 namespace XTOOL
 {
 
-    //static function declaration
+   
+    
     static void* runThread(IThread* inThread)
     {
         if ( inThread != NULL)
@@ -21,6 +22,14 @@ namespace XTOOL
     {
         fStat =eNone;
         fThread = NULL;
+        fManager = new XThreadManager();
+    }
+    
+    IThread::IThread(XThreadManager* inManager)
+    {
+        fStat = eNone;
+        fThread = NULL;
+        fManager = RetainManagedRef(inManager);
     }
     
     IThread::~IThread()
@@ -34,6 +43,8 @@ namespace XTOOL
             
             delete fThread;
         }
+        
+        ReleaseManagedRef(fManager);
         
     }
     
@@ -85,14 +96,14 @@ namespace XTOOL
     {
         return fThread;
     }
+    
+    TError IThread::SetManager (XThreadManager* inManager)
+    {
+        ReleaseManagedRef(fManager);
+        fManager = RetainManagedRef(inManager);
+        
+        return 0;
+    }
 }
 
-class TestThread : public XTOOL::IThread
-{
-    private:
-    void* OnRun()
-    {
-        std::cout << " From Thread:;" << std::endl;
-    }
-};
 
