@@ -8,11 +8,8 @@
 #define __X_FILE_H__
 
 //> TODO: manage Headers
-#include "../Types.h"
-#include "../RefManaged"
-
-//maybe move this declarion somewhere; when use precompiled headers
-#include <vector> ;
+#include "Types.h"
+#include "RefManaged.h"
 
 
 /*
@@ -50,12 +47,13 @@ namespace XTOOL
         typedef std::vector<XFile*> XFiles;
         typedef std::vector<XFolder*> XFolders;
         
+        //default ctor
         XFolder();
-        
+        // construct from a Dir Path roots
         XFolder(const TDirPath& inDirPath);
         ~XFolder();
         
-        iterator    begin() ;
+        iterator    firstFile() ;
         iterator    end() ;
         
         std::vector<TString>  GetFilesNames();
