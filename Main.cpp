@@ -16,7 +16,7 @@ class ThreadPlg : public IThread
     void* OnRun()
     {
         
-       //if( fManager->LockSection())
+       if( fManager->LockSection())
        {
            printf("%p\n", fManager);  
             CPlugin* plg = dynamic_cast<CPlugin*>(PluginManager::Get().RetainPluginByType('PLG0'));
@@ -27,7 +27,7 @@ class ThreadPlg : public IThread
              //std::this_thread::sleep_for(std::chrono::seconds(2));   
             PluginImpl<CPlugin>* plgIm  = reinterpret_cast<PluginImpl<CPlugin>*>(plg);
              cout << "reference " << plgIm->GetRefCount() << endl;
-          // fManager->UnLockSection();
+          fManager->UnLockSection();
        }
         
     }

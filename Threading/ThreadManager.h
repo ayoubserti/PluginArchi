@@ -67,7 +67,7 @@ namespace XTOOL
         
         protected:
         
-        mutable std::mutex* fMutex;
+        mutable std::mutex fMutex;
         
         private:
         static uLONG sMaxThread;

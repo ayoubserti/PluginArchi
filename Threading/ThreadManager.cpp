@@ -10,25 +10,21 @@ namespace XTOOL
     XThreadManager::XThreadManager()
     {
         
-        fMutex = new std::mutex();
+        
     }
     
     XThreadManager::~XThreadManager()
     {
-        delete fMutex;
+        
     }
     
     bool XThreadManager::LockSection()
     {
         //TODO: Add debug & trace informations
-        if (fMutex == NULL )
-        {
-            return false;
-        }
-        else
+        
         {
             try{
-                fMutex->lock();
+                fMutex.lock();
             }
             catch(std::exception& e)
             {
@@ -42,14 +38,10 @@ namespace XTOOL
     bool XThreadManager::UnLockSection()
     {
         //TODO: Add debug & trace informations
-        if (fMutex == NULL )
-        {
-            return false;
-        }
-        else
+        
         {
             try{
-                fMutex->unlock();
+                fMutex.unlock();
             }
             catch(std::exception& e)
             {
@@ -63,13 +55,9 @@ namespace XTOOL
      bool XThreadManager::TryLockSection()
     {
         //TODO: Add debug & trace informations
-        if (fMutex == NULL )
+        
         {
-            return false;
-        }
-        else
-        {
-            return fMutex->try_lock();
+            return fMutex.try_lock();
         }
     }
 }
