@@ -117,7 +117,7 @@ namespace XTOOL
         if ( !sPluginsDir.empty())
         {
             //TODO:here create XFolders and iterate over XFiles;
-            PluginLibrary* myPlLib = new PluginLibrary(inDirPlugins+"Plug0.so");
+            PluginLibrary* myPlLib = new PluginLibrary(inDirPlugins+"Plug0.so"); //Remove example
             sLibraries.push_back(myPlLib->Retain());
             myPlLib->Release();
         }
@@ -126,7 +126,7 @@ namespace XTOOL
     IPlugin*    PluginManager::RetainPluginByType(TPluginType  inPluginType)
     {
         
-        IPlugin* result = NULL;
+        IPlugin* result = nullptr;
         
         if  (sPluginMap.find(inPluginType) != sPluginMap.end())
         {
@@ -141,11 +141,11 @@ namespace XTOOL
                 if (!sCondidatePluginType[inPluginType])
                 {
                     //if plugin was found but it's not loaded from library 
-                    PluginLibrary* plgLib = GetLibraryContainer(inPluginType);
+                    PluginLibrary* plgLib = GetLibraryContainer(inPluginType); //get without retain
                     if (plgLib)
                     {
                         IPlugin* iPlg = plgLib->RetainPluginByType(inPluginType);
-                        if (iPlg != NULL)
+                        if (iPlg != nullptr)
                         {
                             sPluginMap[inPluginType] = iPlg->Retain();
                             sCondidatePluginType[inPluginType] = true;
@@ -155,7 +155,7 @@ namespace XTOOL
                     }
                     else 
                     {
-                        return NULL;
+                        return nullptr;
                     }
                 }
             }
@@ -170,7 +170,7 @@ namespace XTOOL
     
     PluginLibrary* PluginManager::GetLibraryContainer( TPluginType inPluginType)
     {
-        PluginLibrary* result = NULL;
+        PluginLibrary* result = nullptr;
         
         for (auto& elem : sLibPlugTypeMap)
         {
