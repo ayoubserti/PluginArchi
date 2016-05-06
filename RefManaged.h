@@ -39,9 +39,9 @@ namespace XTOOL
                 delete this;
         }
         
+    protected:
+         unsigned long fRefCount;
     private:
-        //make fRefCount private so any class inherent from RefManaged doesn't change our counter
-        unsigned long fRefCount;
         template<typename T>
         friend T* XTOOL::RetainManagedRef(T* inReference);
         
